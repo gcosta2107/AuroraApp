@@ -1,0 +1,25 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Entrega Continua
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Validar Docker Compose
+        run: docker compose config
+
+      - name: Executar deploy com Docker Compose
+        run: |
+          echo "Iniciando deploy com Docker Compose..."
+          docker compose up -d --build --remove-orphans
+          docker compose ps
+          echo "Deploy realizado com sucesso."
