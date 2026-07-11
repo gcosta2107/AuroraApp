@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./server/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
@@ -25,7 +25,8 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/auroraapp
       PORT: 5000
     ports:
-      - "5000:5000"
+      - "80:5000"
+    restart: unless-stopped
 
 volumes:
   postgres_data:

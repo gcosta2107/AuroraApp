@@ -28,6 +28,9 @@ Usuario: postgres
 Senha: postgres
 ```
 
+No Docker, o Postgres e exposto apenas em `127.0.0.1:5432`, para evitar acesso
+externo direto ao banco.
+
 ## Rodando com Docker
 
 Suba a aplicacao completa, incluindo PostgreSQL, API Python e frontend React:
@@ -39,7 +42,7 @@ docker compose up --build
 Acesse:
 
 ```text
-http://localhost:5000
+http://localhost
 ```
 
 O Postgres sera inicializado com `server/schema.sql` na primeira criacao do
