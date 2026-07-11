@@ -7,19 +7,37 @@ on:
 
 jobs:
   deploy:
-    name: Entrega Continua
-    runs-on: self-hosted
+    name: Deploy Aplicacao Publica
+    runs-on: [self-hosted, Linux, X64, auroraapp-prod]
+    defaults:
+      run:
+        shell: bash
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
       - name: Checkout do codigo
         uses: actions/checkout@v4
 
+      - name: Conferir variaveis obrigatorias
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL nao foi configurada nos secrets do GitHub."
+            exit 1
+          fi
+
+      - name: Conferir Docker no runner Ubuntu
+        run: |
+          docker --version
+          docker compose version
+
       - name: Validar Docker Compose
-        run: docker compose config
+        run: docker compose -f docker-compose.prod.yml config
 
       - name: Executar deploy com Docker Compose
         run: |
           echo "Iniciando deploy com Docker Compose..."
-          docker compose up -d --build --remove-orphans
-          docker compose ps
+          docker compose -f docker-compose.prod.yml pull --ignore-buildable || true
+          docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+          docker compose -f docker-compose.prod.yml ps
           echo "Deploy realizado com sucesso."
