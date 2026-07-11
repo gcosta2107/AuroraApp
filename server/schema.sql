@@ -12,9 +12,12 @@ INSERT INTO users (name, email, password_hash)
 VALUES (
   'Usuario Aurora',
   'admin@aurora.local',
-  '$2a$10$gQOgMlEc53oZ7POvPq36mOBUZUkXyUwbO7WGXRjZDGxUJFN1MVAZK'
+  crypt('aurora123', gen_salt('bf'))
 )
-ON CONFLICT (email) DO NOTHING;
+ON CONFLICT (email) DO UPDATE
+SET
+  name = EXCLUDED.name,
+  password_hash = EXCLUDED.password_hash;
 
 -- Usuario de teste:
 -- email: admin@aurora.local
