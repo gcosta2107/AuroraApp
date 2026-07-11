@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy Aplicacao Publica
-    runs-on: [self-hosted, Linux, X64, auroraapp-prod]
+    runs-on: [self-hosted, Linux, X64]
     defaults:
       run:
         shell: bash
